@@ -19,7 +19,8 @@
     if (self) {
         self.path = dict[@"path"];
         self.name = dict[@"name"];
-        self.size = [dict[@"size"] intValue];
+//        self.size = [dict[@"size"] intValue];
+        self.size = [NSString stringWithFormat:@"%dM",[dict[@"size"] intValue] / 1024 / 1024];
     }
     return self;
 }

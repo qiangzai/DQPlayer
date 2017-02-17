@@ -20,46 +20,12 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W0l-NC-8GB">
-                                <rect key="frame" x="135" y="394" width="104" height="30"/>
-                                <color key="backgroundColor" red="0.6082284376" green="0.91099815159999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="efX-ST-Iw7"/>
-                                    <constraint firstAttribute="width" constant="104" id="gVg-HP-3aR"/>
-                                </constraints>
-                                <state key="normal" title="测试一下"/>
-                                <connections>
-                                    <action selector="test:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NU4-7z-fly"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EvS-wc-8se">
-                                <rect key="frame" x="135" y="159" width="104" height="30"/>
-                                <color key="backgroundColor" red="0.72063206270000002" green="0.77034290039999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="3yy-i8-nap"/>
-                                    <constraint firstAttribute="width" constant="104" id="gOB-x2-E6O"/>
-                                </constraints>
-                                <state key="normal" title="加载用户导入"/>
-                                <connections>
-                                    <action selector="loadfile:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kfM-a5-hcS"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="EvS-wc-8se" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="135" id="a9V-Mj-Y1s"/>
-                            <constraint firstItem="W0l-NC-8GB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="135" id="ayJ-r1-6oc"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="W0l-NC-8GB" secondAttribute="bottom" constant="243" id="gHO-oJ-5sW"/>
-                            <constraint firstItem="EvS-wc-8se" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="139" id="pNS-Qn-Mva"/>
-                            <constraint firstAttribute="trailing" secondItem="W0l-NC-8GB" secondAttribute="trailing" constant="136" id="yAB-gr-1Vl"/>
-                            <constraint firstAttribute="trailing" secondItem="EvS-wc-8se" secondAttribute="trailing" constant="136" id="ylj-4f-239"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="269.60000000000002" y="97.601199400299862"/>
+            <point key="canvasLocation" x="-12" y="51"/>
         </scene>
     </scenes>
 </document>

@@ -15,7 +15,7 @@
 @interface DQVideoModel : NSObject
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, assign) int size;
+@property (nonatomic, strong) NSString *size;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
 
