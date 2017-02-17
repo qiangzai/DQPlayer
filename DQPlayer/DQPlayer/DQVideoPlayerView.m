@@ -154,8 +154,9 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 }
 
 - (void)createVideoPlayer {
-    //    NSString *videoPath = [[NSBundle mainBundle] pathForResource:@"video_1.mp4" ofType:nil];
-    self.playItem = [AVPlayerItem playerItemWithURL:self.urlPath];
+    NSString *videoPath = [[NSBundle mainBundle] pathForResource:@"QQ20170217-165908.mp4" ofType:nil];
+    self.playItem = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:videoPath]];
+//    self.playItem = [AVPlayerItem playerItemWithURL:self.urlPath];
     self.player = [AVPlayer playerWithPlayerItem:_playItem];
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
