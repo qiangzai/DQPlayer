@@ -16,6 +16,8 @@
 		295FCBC71E55A220008DBEE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 295FCBC61E55A220008DBEE7 /* Assets.xcassets */; };
 		295FCBCA1E55A220008DBEE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 295FCBC81E55A220008DBEE7 /* LaunchScreen.storyboard */; };
 		295FCBD31E55A572008DBEE7 /* DQVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 295FCBD21E55A572008DBEE7 /* DQVideoPlayerView.m */; };
+		295FCBD61E56CB11008DBEE7 /* DQVideoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 295FCBD51E56CB11008DBEE7 /* DQVideoTableViewCell.m */; };
+		295FCBD91E56E2C2008DBEE7 /* DQVideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 295FCBD81E56E2C2008DBEE7 /* DQVideoModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,10 @@
 		295FCBCB1E55A220008DBEE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		295FCBD11E55A572008DBEE7 /* DQVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DQVideoPlayerView.h; sourceTree = "<group>"; };
 		295FCBD21E55A572008DBEE7 /* DQVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DQVideoPlayerView.m; sourceTree = "<group>"; };
+		295FCBD41E56CB11008DBEE7 /* DQVideoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DQVideoTableViewCell.h; sourceTree = "<group>"; };
+		295FCBD51E56CB11008DBEE7 /* DQVideoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DQVideoTableViewCell.m; sourceTree = "<group>"; };
+		295FCBD71E56E2C2008DBEE7 /* DQVideoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DQVideoModel.h; sourceTree = "<group>"; };
+		295FCBD81E56E2C2008DBEE7 /* DQVideoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DQVideoModel.m; sourceTree = "<group>"; };
 		8611810649205B2580D8C87A /* Pods-DQPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DQPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DQPlayer/Pods-DQPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		C986E3B7BC9EF22E5D3B02B4 /* libPods-DQPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DQPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -74,6 +80,10 @@
 				295FCBBB1E55A220008DBEE7 /* AppDelegate.m */,
 				295FCBBD1E55A220008DBEE7 /* ViewController.h */,
 				295FCBBE1E55A220008DBEE7 /* ViewController.m */,
+				295FCBD41E56CB11008DBEE7 /* DQVideoTableViewCell.h */,
+				295FCBD51E56CB11008DBEE7 /* DQVideoTableViewCell.m */,
+				295FCBD71E56E2C2008DBEE7 /* DQVideoModel.h */,
+				295FCBD81E56E2C2008DBEE7 /* DQVideoModel.m */,
 				295FCBD11E55A572008DBEE7 /* DQVideoPlayerView.h */,
 				295FCBD21E55A572008DBEE7 /* DQVideoPlayerView.m */,
 				295FCBC01E55A220008DBEE7 /* Main.storyboard */,
@@ -234,10 +244,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				295FCBD61E56CB11008DBEE7 /* DQVideoTableViewCell.m in Sources */,
 				295FCBD31E55A572008DBEE7 /* DQVideoPlayerView.m in Sources */,
 				295FCBBF1E55A220008DBEE7 /* ViewController.m in Sources */,
 				295FCBBC1E55A220008DBEE7 /* AppDelegate.m in Sources */,
 				295FCBB91E55A220008DBEE7 /* main.m in Sources */,
+				295FCBD91E56E2C2008DBEE7 /* DQVideoModel.m in Sources */,
 				295FCBC51E55A220008DBEE7 /* DQPlayer.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -5,7 +5,7 @@
 //  Created by  lizhongqiang on 2017/2/16.
 //  Copyright © 2017年  lizhongqiang. All rights reserved.
 //
-//  psylife
+//  
 //  @class DQVideoPlayerView
 //  @description 视频封装层
 //

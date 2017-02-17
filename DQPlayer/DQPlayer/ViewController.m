@@ -9,11 +9,14 @@
 #import "ViewController.h"
 #import <Masonry.h>
 #import "DQVideoPlayerView.h"
+#import "DQVideoTableViewCell.h"
 
 #define kDQWidth       ([[UIScreen mainScreen] bounds].size.width)
 #define kDQHeight      ([[UIScreen mainScreen] bounds].size.height)
 
-@interface ViewController ()<DQVideoPlayerViewDelegate>
+@interface ViewController ()<DQVideoPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) UITableView *listTableView;
+@property (nonatomic, strong) NSArray *listArray;
 @property (nonatomic, strong) DQVideoPlayerView *video;
 @end
 
@@ -23,11 +26,93 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.video = [[DQVideoPlayerView alloc] init];
-    self.video.delegate = self;
+//    self.video = [[DQVideoPlayerView alloc] init];
+//    self.video.delegate = self;
+//    
+//    self.video.frame = CGRectMake(0, 160, [[UIScreen mainScreen] bounds].size.width, 200);//必须指定frame AVPlayerLayer是layer 不可使用autolayout
+//    [self.view addSubview:self.video];
     
-    self.video.frame = CGRectMake(0, 160, [[UIScreen mainScreen] bounds].size.width, 200);//必须指定frame AVPlayerLayer是layer 不可使用autolayout
-    [self.view addSubview:self.video];
+    [self loadFiles];
+    
+    self.listTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.listTableView.dataSource = self;
+    self.listTableView.delegate = self;
+    self.listTableView.estimatedRowHeight = 80;
+    self.listTableView.rowHeight = 80;
+    [self.listTableView registerClass:[DQVideoTableViewCell class] forCellReuseIdentifier:@"cell"];
+    [self.view addSubview:self.listTableView];
+    
+    
+}
+
+#pragma mark - UITableViewDelegate && UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.listArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    DQVideoTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell == nil) {
+        cell = [[DQVideoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        
+    }
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+#pragma mark - private methods
+- (void)loadFiles {
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSError *error = nil;
+    //假如存在多级文件夹  如何处理？
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSArray *nameArr = [manager contentsOfDirectoryAtPath:documentsPath error:&error];
+    for (int i = 0; i < nameArr.count; i ++) {
+        NSString *path = [documentsPath stringByAppendingString:nameArr[i]];
+        NSDictionary *dict = [manager attributesOfItemAtPath:path error:&error];
+        NSMutableDictionary *fileDict = [[NSMutableDictionary alloc] init];
+        [fileDict setObject:path forKey:@"path"];
+        [fileDict setObject:dict[@"NSFileSize"] forKey:@"size"];
+        [fileDict setObject:nameArr[i] forKey:@"name"];
+        [array addObject:fileDict];
+    }
+    
+    self.listArray = array;
+    [self.listTableView reloadData];
+    
+}
+
+- (UIImage *)videoPreViewImageWithUrl:(NSString *)url {
+    
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:url] options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *img = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return img;
+    
+}
+
+- (IBAction)loadfile:(UIButton *)sender {
+    
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString *dbPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSError *error = nil;
+    NSArray *array = [manager contentsOfDirectoryAtPath:dbPath error:&error];
+    NSLog(@"%@",array);
+    NSLog(@"%@",dbPath);
+    
+    NSString *item = [dbPath stringByAppendingString:@"/182A1780.MOV"];
+    NSLog(@"\n%@",[manager attributesOfItemAtPath:item error:&error]);
+    
     
 }
 
