@@ -22,14 +22,14 @@
 @end
 @interface DQVideoPlayerView : UIView
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
-@property (nonatomic, strong) NSString *playUrl;
+@property (nonatomic, strong) NSString *playUrl;                //视频播放路径（本地or网络）
 @property (nonatomic, weak) id<DQVideoPlayerViewDelegate> delegate;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIButton *pauseAndPlayBtn;
 @property (nonatomic, strong) UIButton *fullBtn;
-
+@property (nonatomic, assign) BOOL netResource;             //是否是网络视频
 
 
 - (void)play;

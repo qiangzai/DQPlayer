@@ -154,9 +154,16 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 }
 
 - (void)createVideoPlayer {
-    NSString *videoPath = [[NSBundle mainBundle] pathForResource:@"QQ20170217-165908.mp4" ofType:nil];
-    self.playItem = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:videoPath]];
-//    self.playItem = [AVPlayerItem playerItemWithURL:self.urlPath];
+    
+    if (_netResource) {
+        self.urlPath = [NSURL URLWithString:self.playUrl];
+        self.playItem = [AVPlayerItem playerItemWithURL:self.urlPath];
+    } else {
+        self.playItem = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:self.playUrl]];
+    }
+    
+    
+    
     self.player = [AVPlayer playerWithPlayerItem:_playItem];
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -180,10 +187,10 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     self.playerLayer.frame = self.bounds;
 }
 
-- (void)setPlayUrl:(NSString *)playUrl {
-    
-    self.urlPath = [NSURL URLWithString:playUrl];
-}
+//- (void)setPlayUrl:(NSString *)playUrl {
+//    
+//    self.urlPath = [NSURL URLWithString:playUrl];
+//}
 
 #pragma mark - control
 - (void)play {
