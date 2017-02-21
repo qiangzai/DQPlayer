@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "DQNavigationController.h"
+#import "DQRootViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,7 +21,24 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window makeKeyAndVisible];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    DQRootViewController *rootVC = [[DQRootViewController alloc] init];
+    DQNavigationController *nav = [[DQNavigationController alloc] initWithRootViewController:rootVC];
+//    nav.supportedInterfaceOrientations = UIInterfaceOrientationMaskAll;
+    self.window.rootViewController = nav;
+    
+    
+    
     return YES;
+}
+
+//为了视频播放的旋转功能
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return self.window.rootViewController.supportedInterfaceOrientations;
 }
 
 

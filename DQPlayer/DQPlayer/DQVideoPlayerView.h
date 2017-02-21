@@ -15,7 +15,7 @@
 
 @class DQVideoPlayerView;
 @protocol DQVideoPlayerViewDelegate <NSObject>
-
+@optional
 //全屏/非全屏切换
 - (void)videoPlayer:(DQVideoPlayerView *)videoPlayer clickFullButton:(UIButton *)fullButton;
 
