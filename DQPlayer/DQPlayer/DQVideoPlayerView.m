@@ -187,10 +187,6 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     self.playerLayer.frame = self.bounds;
 }
 
-//- (void)setPlayUrl:(NSString *)playUrl {
-//    
-//    self.urlPath = [NSURL URLWithString:playUrl];
-//}
 
 #pragma mark - control
 - (void)play {

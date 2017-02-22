@@ -14,15 +14,23 @@
 #import <Masonry.h>
 #import "DQVideoPlayerView.h"
 #import "DQVideoTableViewCell.h"
+#import "DQVideoPlayer.h"
+#import "DQVideoView.h"
+
 
 #define kDQWidth       ([[UIScreen mainScreen] bounds].size.width)
 #define kDQHeight      ([[UIScreen mainScreen] bounds].size.height)
 
 
-@interface DQRootViewController ()<DQVideoPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface DQRootViewController ()<DQVideoPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource, DQVideoViewDelegate>
+{
+    
+}
 @property (nonatomic, strong) UITableView *listTableView;
 @property (nonatomic, strong) NSArray *listArray;
-@property (nonatomic, strong) DQVideoPlayerView *video;
+@property (nonatomic, strong) DQVideoPlayer *videoPlayer;
+@property (nonatomic, strong) DQVideoView *videoView;
+
 
 @end
 
@@ -34,8 +42,8 @@
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"播放";
     
-    self.video = [[DQVideoPlayerView alloc] init];
-    self.video.delegate = self;
+//    self.video = [[DQVideoPlayerView alloc] init];
+//    self.video.delegate = self;
     
     
     [self loadFiles];
@@ -93,40 +101,66 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //    self.video.frame = CGRectMake(0, 160, [[UIScreen mainScreen] bounds].size.width, 200);//必须指定frame AVPlayerLayer是layer 不可使用autolayout
-    [self.view addSubview:self.video];
+    DQVideoModel *model = self.listArray[indexPath.row];
+//    self.video.netResource = NO;
+//    self.video.playUrl = model.path;
+//    [self.view addSubview:self.video];
+//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
+//    self.video.transform = CGAffineTransformIdentity;
+//    self.video.transform = CGAffineTransformMakeRotation(M_PI_2);
+//    self.video.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
+//    self.video.playerLayer.frame = CGRectMake(0, 0, kDQWidth, kDQHeight);
+//    [self.video.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.width.mas_equalTo(kDQWidth);
+//        make.height.mas_equalTo(kDQHeight);
+//        make.left.equalTo(self.video).with.offset(0);
+//        make.top.equalTo(self.video).with.offset(0);
+//    }];
+//    
+//    [[UIApplication sharedApplication].keyWindow addSubview:self.video];
+//    [self setNeedsStatusBarAppearanceUpdate];
+//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self.video];
+//    //路径问题？？？
+//    DQVideoModel *model = self.listArray[indexPath.row];
+//    self.video.netResource = NO;
+//    self.video.playUrl = model.path;
+//    [self.video play];
     
     
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
-    
-    //    [self.video removeFromSuperview];
-    //    [self.view addSubview:self.video];
-    self.video.transform = CGAffineTransformIdentity;
-    self.video.transform = CGAffineTransformMakeRotation(M_PI_2);
-    self.video.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
-    self.video.playerLayer.frame = CGRectMake(0, 0, kDQWidth, kDQHeight);
-    
-    [self.video.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(kDQWidth);
-        make.height.mas_equalTo(kDQHeight);
-        make.left.equalTo(self.video).with.offset(0);
-        make.top.equalTo(self.video).with.offset(0);
-    }];
-    
-    [[UIApplication sharedApplication].keyWindow addSubview:self.video];
-    
+    self.videoPlayer = [[DQVideoPlayer alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
+    self.videoPlayer.transform = CGAffineTransformIdentity;
+    self.videoPlayer.transform = CGAffineTransformMakeRotation(M_PI_2);
+    self.videoPlayer.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
+    self.videoPlayer.playerLayer.frame = CGRectMake(0, 0, kDQWidth, kDQHeight);
+    [[UIApplication sharedApplication].keyWindow addSubview:self.videoPlayer];
     [self setNeedsStatusBarAppearanceUpdate];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self.video];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self.videoPlayer];
     
-    //路径问题？？？
-    DQVideoModel *model = self.listArray[indexPath.row];
-    self.video.netResource = NO;
-    self.video.playUrl = model.path;
-    [self.video play];
+    self.videoView = [[DQVideoView alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
+    self.videoView.playName = model.name;
+    self.videoView.delegate = self;
+    self.videoView.transform = CGAffineTransformIdentity;
+    self.videoView.transform = CGAffineTransformMakeRotation(M_PI_2);
+    self.videoView.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
+    [[UIApplication sharedApplication].keyWindow insertSubview:self.videoView aboveSubview:self.videoPlayer];
+    
+    [self.videoPlayer play];
+    
+    
 }
+
 #pragma mark - event response
 
-#pragma mark - CustomDelegate
+#pragma mark - DQVideoViewDelegate
+- (void)playOrPauseButton:(UIButton *)button {
+//    if (<#condition#>) {
+//        <#statements#>
+//    }
+    [self.videoPlayer play];
+}
+
+#pragma mark - DQVideoPlayerDelegate
 
 #pragma mark -
 
