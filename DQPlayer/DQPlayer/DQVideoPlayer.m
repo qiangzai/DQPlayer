@@ -44,6 +44,13 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     self.playerLayer.frame = self.bounds;
 }
 
+- (void)dealloc {
+//    [super dealloc];
+    self.player = nil;
+    self.playerItem = nil;
+    self.playerLayer = nil;
+}
+
 #pragma mark - event response
 
 
@@ -70,13 +77,13 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     [self.layer insertSublayer:self.playerLayer atIndex:0];
     
     
-    [self.playerItem addObserver:self forKeyPath:kStatus options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-    [self.playerItem addObserver:self forKeyPath:kLoadedTimeRanges options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-    [self.playerItem addObserver:self forKeyPath:kPlayBackBufferEmpty options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-    [self.playerItem addObserver:self forKeyPath:kPlayBackLikelyToKeepUp options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-    [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-    //添加视频播放结束通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem];
+//    [self.playerItem addObserver:self forKeyPath:kStatus options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+//    [self.playerItem addObserver:self forKeyPath:kLoadedTimeRanges options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+//    [self.playerItem addObserver:self forKeyPath:kPlayBackBufferEmpty options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+//    [self.playerItem addObserver:self forKeyPath:kPlayBackLikelyToKeepUp options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+//    [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+//    //添加视频播放结束通知
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem];
 
     
     

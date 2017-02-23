@@ -47,6 +47,12 @@
     }
 }
 
+- (void)backBtnClick:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(back)]) {
+        [self.delegate back];
+    }
+}
+
 #pragma mark - 
 
 #pragma mark - private methods
@@ -70,6 +76,8 @@
     
     self.backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [self.backBtn setBackgroundColor:[UIColor redColor]];
+    [self.backBtn addTarget:self action:@selector(backBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.topView addSubview:self.backBtn];
     [self.backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.topView.mas_centerY);
@@ -93,7 +101,8 @@
     self.bottomAlphaView.alpha = 0.3;
     [self addSubview:self.bottomAlphaView];
     [self.bottomAlphaView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.mas_bottom);
+        make.top.equalTo(self.topAlphaView.mas_bottom).with.offset(kDQHeight - 100);
+//        make.top.equalTo(self.mas_bottom).with.offset(-500);
         make.size.mas_equalTo(CGSizeMake([[UIScreen mainScreen] bounds].size.width, 50));
         make.left.equalTo(self.mas_left);
     }];

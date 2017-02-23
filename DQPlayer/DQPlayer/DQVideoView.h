@@ -16,6 +16,7 @@
 @protocol DQVideoViewDelegate <NSObject>
 
 - (void)playOrPauseButton:(UIButton *)button;
+- (void)back;
 
 @end
 

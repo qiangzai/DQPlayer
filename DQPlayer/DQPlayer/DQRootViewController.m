@@ -18,8 +18,7 @@
 #import "DQVideoView.h"
 
 
-#define kDQWidth       ([[UIScreen mainScreen] bounds].size.width)
-#define kDQHeight      ([[UIScreen mainScreen] bounds].size.height)
+
 
 
 @interface DQRootViewController ()<DQVideoPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource, DQVideoViewDelegate>
@@ -142,7 +141,10 @@
     self.videoView.delegate = self;
     self.videoView.transform = CGAffineTransformIdentity;
     self.videoView.transform = CGAffineTransformMakeRotation(M_PI_2);
+    NSLog(@"%@",self.videoView);
     self.videoView.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
+    NSLog(@"%@",self.videoView);
+    
     [[UIApplication sharedApplication].keyWindow insertSubview:self.videoView aboveSubview:self.videoPlayer];
     
     [self.videoPlayer play];
@@ -158,6 +160,13 @@
 //        <#statements#>
 //    }
     [self.videoPlayer play];
+}
+
+- (void)back {
+    [self.videoPlayer removeFromSuperview];
+    [self.videoView removeFromSuperview];
+    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 #pragma mark - DQVideoPlayerDelegate
