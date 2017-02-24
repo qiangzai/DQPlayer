@@ -102,7 +102,6 @@
     [self addSubview:self.bottomAlphaView];
     [self.bottomAlphaView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.topAlphaView.mas_bottom).with.offset(kDQHeight - 100);
-//        make.top.equalTo(self.mas_bottom).with.offset(-500);
         make.size.mas_equalTo(CGSizeMake([[UIScreen mainScreen] bounds].size.width, 50));
         make.left.equalTo(self.mas_left);
     }];
@@ -122,6 +121,7 @@
         make.size.mas_equalTo(CGSizeMake(100, 40));
     }];
     
+    self.timeLabel = [[UILabel alloc] init];
     
 }
 #pragma mark - setter / getter

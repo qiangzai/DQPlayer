@@ -156,10 +156,13 @@
 
 #pragma mark - DQVideoViewDelegate
 - (void)playOrPauseButton:(UIButton *)button {
-//    if (<#condition#>) {
-//        <#statements#>
-//    }
-    [self.videoPlayer play];
+    if (button.selected) {
+        [self.videoPlayer play];
+    } else {
+        [self.videoPlayer pause];
+    }
+    button.selected = !button.selected;
+    
 }
 
 - (void)back {
