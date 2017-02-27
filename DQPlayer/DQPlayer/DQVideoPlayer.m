@@ -21,8 +21,7 @@ static NSString *kPlayBackBufferEmpty = @"playbackBufferEmpty";
 static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 
 @interface DQVideoPlayer ()
-@property (nonatomic, strong) AVPlayer *player;
-@property (nonatomic, strong) AVPlayerItem *playerItem;
+
 
 @end
 
@@ -34,7 +33,7 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     if (self) {
         self.playRate = 1.0;
         
-        [self createVideoPlayer];
+//        [self createVideoPlayer];
     }
     return self;
 }
@@ -45,7 +44,12 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 }
 
 - (void)dealloc {
-//    [super dealloc];
+
+    [self.player.currentItem cancelPendingSeeks];
+    [self.player.currentItem.asset cancelLoading];
+    [self.player pause];
+    [self.playerLayer removeFromSuperlayer];
+    [self.player replaceCurrentItemWithPlayerItem:nil];
     self.player = nil;
     self.playerItem = nil;
     self.playerLayer = nil;
@@ -57,6 +61,8 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 
 #pragma mark - 对外接口
 - (void)play {
+    
+    [self createVideoPlayer];
     [self.player play];
 }
 
@@ -67,8 +73,8 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 #pragma mark - private methods
 - (void)createVideoPlayer {
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"QQ20170217-165908.mp4" ofType:nil];
-    self.playerItem = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:path]];
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"QQ20170217-165908.mp4" ofType:nil];
+    self.playerItem = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:self.urlPath]];
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
     self.player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -77,17 +83,16 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     [self.layer insertSublayer:self.playerLayer atIndex:0];
     
     
-//    [self.playerItem addObserver:self forKeyPath:kStatus options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-//    [self.playerItem addObserver:self forKeyPath:kLoadedTimeRanges options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-//    [self.playerItem addObserver:self forKeyPath:kPlayBackBufferEmpty options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-//    [self.playerItem addObserver:self forKeyPath:kPlayBackLikelyToKeepUp options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
-//    [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
-//    //添加视频播放结束通知
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem];
-
-    
+    [self.playerItem addObserver:self forKeyPath:kStatus options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+    [self.playerItem addObserver:self forKeyPath:kLoadedTimeRanges options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+    [self.playerItem addObserver:self forKeyPath:kPlayBackBufferEmpty options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+    [self.playerItem addObserver:self forKeyPath:kPlayBackLikelyToKeepUp options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
+    [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
+    //添加视频播放结束通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem];
     
 }
+
 
 #pragma mark - play end
 - (void)moviePlayDidEnd:(NSNotification *)notification {
@@ -97,7 +102,37 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 #pragma mark - KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     
-    
+    if (context == kPlayerItemObservationContext) {
+        if ([keyPath isEqualToString:kStatus]) {
+            AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+            switch (status) {
+                case AVPlayerStatusUnknown:
+                {
+                    
+                }
+                    break;
+                case AVPlayerStatusReadyToPlay:
+                {
+                    
+                }
+                    break;
+                case AVPlayerStatusFailed:
+                {
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        } else if ([keyPath isEqualToString:kLoadedTimeRanges]) {
+            
+        } else if ([keyPath isEqualToString:kPlayBackBufferEmpty]) {
+            
+        } else if ([keyPath isEqualToString:kPlayBackLikelyToKeepUp]) {
+            
+        }
+    }
     
     
 }

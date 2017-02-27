@@ -59,7 +59,7 @@
 - (void)createControlView {
     self.topAlphaView = [[UIView alloc] init];
     self.topAlphaView.backgroundColor = [UIColor blackColor];
-    self.topAlphaView.alpha = 0.3;
+    self.topAlphaView.alpha = 0.5;
     [self addSubview:self.topAlphaView];
     [self.topAlphaView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_top);
@@ -98,7 +98,7 @@
     
     self.bottomAlphaView = [[UIView alloc] init];
     self.bottomAlphaView.backgroundColor = [UIColor blackColor];
-    self.bottomAlphaView.alpha = 0.3;
+    self.bottomAlphaView.alpha = 0.5;
     [self addSubview:self.bottomAlphaView];
     [self.bottomAlphaView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.topAlphaView.mas_bottom).with.offset(kDQHeight - 100);

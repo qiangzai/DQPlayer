@@ -101,33 +101,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     DQVideoModel *model = self.listArray[indexPath.row];
-//    self.video.netResource = NO;
-//    self.video.playUrl = model.path;
-//    [self.view addSubview:self.video];
-//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
-//    self.video.transform = CGAffineTransformIdentity;
-//    self.video.transform = CGAffineTransformMakeRotation(M_PI_2);
-//    self.video.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
-//    self.video.playerLayer.frame = CGRectMake(0, 0, kDQWidth, kDQHeight);
-//    [self.video.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.width.mas_equalTo(kDQWidth);
-//        make.height.mas_equalTo(kDQHeight);
-//        make.left.equalTo(self.video).with.offset(0);
-//        make.top.equalTo(self.video).with.offset(0);
-//    }];
-//    
-//    [[UIApplication sharedApplication].keyWindow addSubview:self.video];
-//    [self setNeedsStatusBarAppearanceUpdate];
-//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self.video];
-//    //路径问题？？？
-//    DQVideoModel *model = self.listArray[indexPath.row];
-//    self.video.netResource = NO;
-//    self.video.playUrl = model.path;
-//    [self.video play];
-    
     
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
     self.videoPlayer = [[DQVideoPlayer alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
+    self.videoPlayer.urlPath = model.path;
     self.videoPlayer.transform = CGAffineTransformIdentity;
     self.videoPlayer.transform = CGAffineTransformMakeRotation(M_PI_2);
     self.videoPlayer.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
@@ -166,11 +143,24 @@
 }
 
 - (void)back {
+    [self.videoPlayer pause];
     [self.videoPlayer removeFromSuperview];
+    [self.videoPlayer.playerLayer removeFromSuperlayer];
+    [self.videoPlayer.player replaceCurrentItemWithPlayerItem:nil];
+    self.videoPlayer.player = nil;
+    self.videoPlayer.playerItem = nil;
+    self.videoPlayer = nil;
+    
     [self.videoView removeFromSuperview];
+    
+    
+    
+    
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
     [self setNeedsStatusBarAppearanceUpdate];
 }
+
+
 
 #pragma mark - DQVideoPlayerDelegate
 

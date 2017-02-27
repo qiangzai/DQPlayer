@@ -24,7 +24,9 @@
 @interface DQVideoPlayer : UIView
 @property (nonatomic, assign) float playRate;
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
-
+@property (nonatomic, strong) AVPlayer *player;
+@property (nonatomic, strong) AVPlayerItem *playerItem;
+@property (nonatomic, copy) NSString *urlPath;
 
 /**
  播放
