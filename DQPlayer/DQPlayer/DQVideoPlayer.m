@@ -44,10 +44,20 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 }
 
 - (void)dealloc {
-
+    //移除通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [self.player.currentItem cancelPendingSeeks];
     [self.player.currentItem.asset cancelLoading];
     [self.player pause];
+    
+    //移除观察者
+    [self.playerItem removeObserver:self forKeyPath:@"status"];
+    [self.playerItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+    [self.playerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+    [self.playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    
+    
     [self.playerLayer removeFromSuperlayer];
     [self.player replaceCurrentItemWithPlayerItem:nil];
     self.player = nil;
@@ -100,42 +110,42 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 }
 
 #pragma mark - KVO
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    
-    if (context == kPlayerItemObservationContext) {
-        if ([keyPath isEqualToString:kStatus]) {
-            AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-            switch (status) {
-                case AVPlayerStatusUnknown:
-                {
-                    
-                }
-                    break;
-                case AVPlayerStatusReadyToPlay:
-                {
-                    
-                }
-                    break;
-                case AVPlayerStatusFailed:
-                {
-                    
-                }
-                    break;
-                    
-                default:
-                    break;
-            }
-        } else if ([keyPath isEqualToString:kLoadedTimeRanges]) {
-            
-        } else if ([keyPath isEqualToString:kPlayBackBufferEmpty]) {
-            
-        } else if ([keyPath isEqualToString:kPlayBackLikelyToKeepUp]) {
-            
-        }
-    }
-    
-    
-}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+//    
+//    if (context == kPlayerItemObservationContext) {
+//        if ([keyPath isEqualToString:kStatus]) {
+//            AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+//            switch (status) {
+//                case AVPlayerStatusUnknown:
+//                {
+//                    
+//                }
+//                    break;
+//                case AVPlayerStatusReadyToPlay:
+//                {
+//                    
+//                }
+//                    break;
+//                case AVPlayerStatusFailed:
+//                {
+//                    
+//                }
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//        } else if ([keyPath isEqualToString:kLoadedTimeRanges]) {
+//            
+//        } else if ([keyPath isEqualToString:kPlayBackBufferEmpty]) {
+//            
+//        } else if ([keyPath isEqualToString:kPlayBackLikelyToKeepUp]) {
+//            
+//        }
+//    }
+//    
+//    
+//}
 
 
 #pragma mark - setter / getter
