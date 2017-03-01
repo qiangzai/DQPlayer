@@ -144,17 +144,17 @@
 
 - (void)back {
     [self.videoPlayer pause];
+    
+    
+    [self.videoPlayer.player replaceCurrentItemWithPlayerItem:nil];
+    
+    
+    [self.videoView removeFromSuperview];
     [self.videoPlayer removeFromSuperview];
     [self.videoPlayer.playerLayer removeFromSuperlayer];
-    [self.videoPlayer.player replaceCurrentItemWithPlayerItem:nil];
     self.videoPlayer.player = nil;
     self.videoPlayer.playerItem = nil;
     self.videoPlayer = nil;
-    
-    [self.videoView removeFromSuperview];
-    
-    
-    
     
     [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
     [self setNeedsStatusBarAppearanceUpdate];

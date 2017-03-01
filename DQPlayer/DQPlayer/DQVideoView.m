@@ -13,6 +13,7 @@
 
 #import "DQVideoView.h"
 #import <Masonry.h>
+#import "UIView+DQControlView.h"
 
 @interface DQVideoView ()
 @property (nonatomic, strong) UIView *topAlphaView;
@@ -25,6 +26,7 @@
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UISlider *progressSlider; //播放进度
 @property (nonatomic, strong) UIButton *playOrPauseBtn;
+
 
 @end
 
@@ -48,6 +50,7 @@
 }
 
 - (void)backBtnClick:(id)sender {
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(back)]) {
         [self.delegate back];
     }
@@ -122,10 +125,26 @@
     }];
     
     self.timeLabel = [[UILabel alloc] init];
+    [self.bottomView addSubview:self.timeLabel];
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.playOrPauseBtn.mas_right).with.offset(10);
+        make.centerY.equalTo(self.bottomView.mas_centerY);
+    }];
     
 }
+
+- (void)playerCurrentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime sliderValue:(CGFloat)value {
+    self.timeLabel.text = [NSString stringWithFormat:@"%ld / %ld",(long)currentTime,(long)totalTime];
+    
+    
+    
+    
+}
+
 #pragma mark - setter / getter
 - (void)setPlayName:(NSString *)playName {
     self.nameLabel.text = playName;
 }
+
+
 @end

@@ -21,6 +21,7 @@ static NSString *kPlayBackBufferEmpty = @"playbackBufferEmpty";
 static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 
 @interface DQVideoPlayer ()
+@property (nonatomic, strong) id timeObserve;
 
 
 @end
@@ -46,11 +47,6 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 - (void)dealloc {
     //移除通知
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [self.player.currentItem cancelPendingSeeks];
-    [self.player.currentItem.asset cancelLoading];
-    [self.player pause];
-    
     //移除观察者
     [self.playerItem removeObserver:self forKeyPath:@"status"];
     [self.playerItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
@@ -58,8 +54,17 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     [self.playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
     
     
+    [self.player.currentItem cancelPendingSeeks];
+    [self.player.currentItem.asset cancelLoading];
+    [self.player pause];
+    
+    [self.player removeTimeObserver:self.timeObserve];
+    self.timeObserve = nil;
+    
+    
+    
     [self.playerLayer removeFromSuperlayer];
-    [self.player replaceCurrentItemWithPlayerItem:nil];
+//    [self.player replaceCurrentItemWithPlayerItem:nil];
     self.player = nil;
     self.playerItem = nil;
     self.playerLayer = nil;
@@ -92,7 +97,12 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     self.playerLayer.videoGravity = AVLayerVideoGravityResize;
     [self.layer insertSublayer:self.playerLayer atIndex:0];
     
+    [self addNotification];
     
+    [self createTimer];
+}
+
+- (void)addNotification {
     [self.playerItem addObserver:self forKeyPath:kStatus options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
     [self.playerItem addObserver:self forKeyPath:kLoadedTimeRanges options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
     [self.playerItem addObserver:self forKeyPath:kPlayBackBufferEmpty options:NSKeyValueObservingOptionNew context:kPlayerItemObservationContext];
@@ -100,9 +110,34 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
     [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
     //添加视频播放结束通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem];
+}
+
+- (void)removeNotification {
     
 }
 
+- (void)removeKVO {
+    //移除观察者
+    [self.playerItem removeObserver:self forKeyPath:@"status"];
+    [self.playerItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+    [self.playerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+    [self.playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+}
+
+- (void)createTimer {
+    __weak typeof(self) weakSelf = self;
+    self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, 1) queue:nil usingBlock:^(CMTime time) {
+        AVPlayerItem *currentItem = weakSelf.playerItem;
+        NSArray *loadedRanges = currentItem.seekableTimeRanges;
+        if (loadedRanges.count > 0 && currentItem.duration.timescale != 0) {
+            NSInteger currentTime = (NSInteger)CMTimeGetSeconds([currentItem currentTime]);
+            CGFloat totalTime = (CGFloat)currentItem.duration.value / currentItem.duration.timescale;
+            CGFloat value = CMTimeGetSeconds([currentItem currentTime]) / totalTime;
+            NSLog(@"currentTime = %ld \n%f",(long)currentTime,totalTime);
+            NSLog(@"value = %f",value);
+        }
+    }];
+}
 
 #pragma mark - play end
 - (void)moviePlayDidEnd:(NSNotification *)notification {
@@ -110,42 +145,42 @@ static NSString *kPlayBackLikelyToKeepUp = @"playbackLikelyToKeepUp";
 }
 
 #pragma mark - KVO
-//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-//    
-//    if (context == kPlayerItemObservationContext) {
-//        if ([keyPath isEqualToString:kStatus]) {
-//            AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-//            switch (status) {
-//                case AVPlayerStatusUnknown:
-//                {
-//                    
-//                }
-//                    break;
-//                case AVPlayerStatusReadyToPlay:
-//                {
-//                    
-//                }
-//                    break;
-//                case AVPlayerStatusFailed:
-//                {
-//                    
-//                }
-//                    break;
-//                    
-//                default:
-//                    break;
-//            }
-//        } else if ([keyPath isEqualToString:kLoadedTimeRanges]) {
-//            
-//        } else if ([keyPath isEqualToString:kPlayBackBufferEmpty]) {
-//            
-//        } else if ([keyPath isEqualToString:kPlayBackLikelyToKeepUp]) {
-//            
-//        }
-//    }
-//    
-//    
-//}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    
+    if (context == kPlayerItemObservationContext) {
+        if ([keyPath isEqualToString:kStatus]) {
+            AVPlayerStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+            switch (status) {
+                case AVPlayerStatusUnknown:
+                {
+                    
+                }
+                    break;
+                case AVPlayerStatusReadyToPlay:
+                {
+                    NSLog(@"这里还在执行？");
+                }
+                    break;
+                case AVPlayerStatusFailed:
+                {
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        } else if ([keyPath isEqualToString:kLoadedTimeRanges]) {
+            
+        } else if ([keyPath isEqualToString:kPlayBackBufferEmpty]) {
+            
+        } else if ([keyPath isEqualToString:kPlayBackLikelyToKeepUp]) {
+            
+        }
+    }
+    
+    
+}
 
 
 #pragma mark - setter / getter
