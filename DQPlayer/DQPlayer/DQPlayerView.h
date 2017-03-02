@@ -23,5 +23,7 @@
 
 - (void)pause;
 
+- (void)fullScreenAction;
+
 
 @end

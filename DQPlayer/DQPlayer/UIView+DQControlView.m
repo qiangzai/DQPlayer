@@ -29,5 +29,7 @@
 
 - (void)playerItemPlaying {}
 
+- (void)playerModel:(DQPlayerModel *)playerModel {}
+
 
 @end

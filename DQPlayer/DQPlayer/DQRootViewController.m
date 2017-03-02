@@ -17,7 +17,9 @@
 #import "DQVideoPlayer.h"
 #import "DQVideoView.h"
 
-
+#import "DQPlayerView.h"
+#import "DQPlayerModel.h"
+#import "DQPlayerControlView.h"
 
 
 
@@ -30,7 +32,11 @@
 @property (nonatomic, strong) DQVideoPlayer *videoPlayer;
 @property (nonatomic, strong) DQVideoView *videoView;
 
+@property (nonatomic, strong) DQPlayerView *playerView;
+@property (nonatomic, strong) DQPlayerModel *playerModel;
 
+
+@property (nonatomic, strong) UIView *playerFatherView;
 @end
 
 @implementation DQRootViewController
@@ -45,7 +51,7 @@
 //    self.video.delegate = self;
     
     
-    [self loadFiles];
+//    [self loadFiles];
     
     self.listTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.listTableView.dataSource = self;
@@ -58,6 +64,16 @@
         make.edges.mas_equalTo(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
     
+    self.playerFatherView = [[UIView alloc] init];
+//    self.playerFatherView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:self.playerFatherView];
+    [self.playerFatherView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(64);
+//        make.leading.trailing.mas_equalTo(0);
+//        make.height.mas_equalTo(self.playerFatherView.mas_width).multipliedBy(9.0f/16.0f);
+        make.size.mas_equalTo(CGSizeMake(kDQWidth, 300));
+        make.left.equalTo(self.view.mas_left);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,7 +103,8 @@
 }
 #pragma mark - UITableViewDelegate && UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.listArray.count;
+//    return self.listArray.count;
+    return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -95,39 +112,48 @@
     if (cell == nil) {
         cell = [[DQVideoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    [cell showCellWithModel:self.listArray[indexPath.row]];
+//    [cell showCellWithModel:self.listArray[indexPath.row]];
+    [cell showCellWithModel:nil];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DQVideoModel *model = self.listArray[indexPath.row];
+    NSLog(@"%@",self.playerView);
     
-    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
-    self.videoPlayer = [[DQVideoPlayer alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
-    self.videoPlayer.urlPath = model.path;
-    self.videoPlayer.transform = CGAffineTransformIdentity;
-    self.videoPlayer.transform = CGAffineTransformMakeRotation(M_PI_2);
-    self.videoPlayer.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
-    self.videoPlayer.playerLayer.frame = CGRectMake(0, 0, kDQWidth, kDQHeight);
-    [[UIApplication sharedApplication].keyWindow addSubview:self.videoPlayer];
-    [self setNeedsStatusBarAppearanceUpdate];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self.videoPlayer];
-    
-    self.videoView = [[DQVideoView alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
-    self.videoView.playName = model.name;
-    self.videoView.delegate = self;
-    self.videoView.transform = CGAffineTransformIdentity;
-    self.videoView.transform = CGAffineTransformMakeRotation(M_PI_2);
-    NSLog(@"%@",self.videoView);
-    self.videoView.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
-    NSLog(@"%@",self.videoView);
-    
-    [[UIApplication sharedApplication].keyWindow insertSubview:self.videoView aboveSubview:self.videoPlayer];
-    
-    [self.videoPlayer play];
-    
-    
+    [self.playerView resetToPlayNewVideo:self.playerModel];
+    [self.playerView play];
+//    [self.playerView fullScreenAction];
 }
+
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    DQVideoModel *model = self.listArray[indexPath.row];
+//    
+//    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:YES];
+//    self.videoPlayer = [[DQVideoPlayer alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
+//    self.videoPlayer.urlPath = model.path;
+//    self.videoPlayer.transform = CGAffineTransformIdentity;
+//    self.videoPlayer.transform = CGAffineTransformMakeRotation(M_PI_2);
+//    self.videoPlayer.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
+//    self.videoPlayer.playerLayer.frame = CGRectMake(0, 0, kDQWidth, kDQHeight);
+//    [[UIApplication sharedApplication].keyWindow addSubview:self.videoPlayer];
+//    [self setNeedsStatusBarAppearanceUpdate];
+//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self.videoPlayer];
+//    
+//    self.videoView = [[DQVideoView alloc] initWithFrame:CGRectMake(0, 0, kDQWidth, kDQHeight)];
+//    self.videoView.playName = model.name;
+//    self.videoView.delegate = self;
+//    self.videoView.transform = CGAffineTransformIdentity;
+//    self.videoView.transform = CGAffineTransformMakeRotation(M_PI_2);
+//    NSLog(@"%@",self.videoView);
+//    self.videoView.frame = CGRectMake(0, 0, kDQHeight, kDQWidth);
+//    NSLog(@"%@",self.videoView);
+//    
+//    [[UIApplication sharedApplication].keyWindow insertSubview:self.videoView aboveSubview:self.videoPlayer];
+//    
+//    [self.videoPlayer play];
+//    
+//    
+//}
 
 #pragma mark - event response
 
@@ -192,6 +218,22 @@
     
 }
 #pragma mark - setter / getter
+- (DQPlayerView *)playerView {
+    if (_playerView == nil) {
+        _playerView = [[DQPlayerView alloc] init];
+        [_playerView playerControlView:nil playerModel:self.playerModel];
+    }
+    return _playerView;
+}
 
-
+- (DQPlayerModel *)playerModel {
+    if (_playerModel == nil) {
+        _playerModel = [[DQPlayerModel alloc] init];
+        _playerModel.title = @"视频标题";
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"QQ20170217-165908.mp4" ofType:nil];
+        _playerModel.videoURL = [NSURL fileURLWithPath:path];
+        _playerModel.fatherView = self.playerFatherView;
+    }
+    return _playerModel;
+}
 @end

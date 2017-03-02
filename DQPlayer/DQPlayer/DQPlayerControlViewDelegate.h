@@ -21,7 +21,7 @@
 
 - (void)controlView:(UIView *)controlView playAction:(UIButton *)sender;
 
-
+- (void)controlView:(UIView *)controlView fullScreenAction:(UIButton *)sender;
 
 
 

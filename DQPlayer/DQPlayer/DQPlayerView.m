@@ -23,6 +23,7 @@
 @property (nonatomic, assign) NSInteger seekTime;
 @property (nonatomic, strong) NSURL *videoURL;
 @property (nonatomic, strong) NSDictionary *resolutionDic;
+@property (nonatomic, assign) BOOL isFullScreen;
 
 @end
 
@@ -38,7 +39,12 @@
 }
 
 - (void)dealloc {
-    
+    self.playerItem = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (self.timeObserve) {
+        [self.player removeTimeObserver:self];
+        self.timeObserve = nil;
+    }
 }
 
 - (void)resetToPlayNewURL {
@@ -99,7 +105,7 @@
     
     self.controlView = nil;
     
-    [self removeFromSuperview];
+//    [self removeFromSuperview];
     
     
     
@@ -113,28 +119,30 @@
 }
 
 - (void)play {
-    
+//    [self configPlayer];
+    [_player play];
 }
 
 - (void)pause {
-    
+    [_player pause];
 }
 
 #pragma mark - Private Method
 - (void)configPlayer {
-    self.urlAsset = [AVURLAsset assetWithURL:self.videoURL];
-    self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
+//    self.urlAsset = [AVURLAsset assetWithURL:self.videoURL];
+//    self.playerItem = [AVPlayerItem playerItemWithAsset:self.urlAsset];
+    self.playerItem = [AVPlayerItem playerItemWithURL:self.videoURL];
     self.player = [AVPlayer playerWithPlayerItem:self.playerItem];
     
     self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
     
-    self.backgroundColor = [UIColor blackColor];
+    self.backgroundColor = [UIColor whiteColor];
     
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
     
     [self createTimer];
     
-    [self play];
+//    [self play];
 }
 
 - (void)createTimer {
@@ -147,8 +155,84 @@
             CGFloat totalTime = (CGFloat)currentItem.duration.value / currentItem.duration.timescale;
             CGFloat value = CMTimeGetSeconds([currentItem currentTime]) / totalTime;
             [weakSelf.controlView playerCurrentTime:currentTime totalTime:totalTime sliderValue:value];
+            
         }
     }];
+}
+
+- (void)fullScreenAction {
+    //先从小屏到大屏
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (orientation == UIDeviceOrientationLandscapeRight) {
+        [self interfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+    } else {
+        [self interfaceOrientation:UIInterfaceOrientationLandscapeRight];
+    }
+}
+
+- (void)interfaceOrientation:(UIInterfaceOrientation)orientation {
+    if (orientation == UIInterfaceOrientationLandscapeRight || orientation == UIInterfaceOrientationLandscapeLeft) {
+        // 设置横屏
+        [self setOrientationLandscapeConstraint:orientation];
+    } else if (orientation == UIInterfaceOrientationPortrait) {
+        // 设置竖屏
+//        [self setOrientationPortraitConstraint];
+    }
+}
+
+- (void)setOrientationLandscapeConstraint:(UIInterfaceOrientation)orientation {
+    [self toOrientation:orientation];
+//    self.isFullScreen = YES;
+}
+
+- (void)toOrientation:(UIInterfaceOrientation)orientation {
+    // 获取到当前状态条的方向
+    UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    // 判断如果当前方向和要旋转的方向一致,那么不做任何操作
+    if (currentOrientation == orientation) { return; }
+    
+    // 根据要旋转的方向,使用Masonry重新修改限制
+    if (orientation != UIInterfaceOrientationPortrait) {//
+        // 这个地方加判断是为了从全屏的一侧,直接到全屏的另一侧不用修改限制,否则会出错;
+        if (currentOrientation == UIInterfaceOrientationPortrait) {
+            [self removeFromSuperview];
+//            ZFBrightnessView *brightnessView = [ZFBrightnessView sharedBrightnessView];
+            [[UIApplication sharedApplication].keyWindow addSubview:self];
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@(kDQHeight));
+                make.height.equalTo(@(kDQWidth));
+                make.center.equalTo([UIApplication sharedApplication].keyWindow);
+            }];
+        }
+    }
+    // iOS6.0之后,设置状态条的方法能使用的前提是shouldAutorotate为NO,也就是说这个视图控制器内,旋转要关掉;
+    // 也就是说在实现这个方法的时候-(BOOL)shouldAutorotate返回值要为NO
+    [[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
+    // 获取旋转状态条需要的时间:
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.3];
+    // 更改了状态条的方向,但是设备方向UIInterfaceOrientation还是正方向的,这就要设置给你播放视频的视图的方向设置旋转
+    // 给你的播放视频的view视图设置旋转
+    self.transform = CGAffineTransformIdentity;
+    self.transform = [self getTransformRotationAngle];
+    // 开始旋转
+    [UIView commitAnimations];
+    [self.controlView layoutIfNeeded];
+    [self.controlView setNeedsLayout];
+}
+
+- (CGAffineTransform)getTransformRotationAngle {
+    // 状态条的方向已经设置过,所以这个就是你想要旋转的方向
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    // 根据要进行旋转的方向来计算旋转的角度
+    if (orientation == UIInterfaceOrientationPortrait) {
+        return CGAffineTransformIdentity;
+    } else if (orientation == UIInterfaceOrientationLandscapeLeft){
+        return CGAffineTransformMakeRotation(-M_PI_2);
+    } else if(orientation == UIInterfaceOrientationLandscapeRight){
+        return CGAffineTransformMakeRotation(M_PI_2);
+    }
+    return CGAffineTransformIdentity;
 }
 
 #pragma mark - KVO
@@ -184,10 +268,13 @@
 }
 
 - (void)controlView:(UIView *)controlView backAction:(UIButton *)sender {
-    
+    [self resetPlayer];
+    [self removeFromSuperview];
 }
 
-
+- (void)controlView:(UIView *)controlView fullScreenAction:(UIButton *)sender {
+    [self fullScreenAction];
+}
 
 #pragma mark - Setter
 - (void)setVideoURL:(NSURL *)videoURL {
@@ -234,7 +321,7 @@
     if (playerModel.seekTime) {
         self.seekTime = playerModel.seekTime;
     }
-//    [self.controlView playerModel];
+    [self.controlView playerModel:playerModel];
     [self addPlayerToFatherView:playerModel.fatherView];
     self.videoURL = playerModel.videoURL;
     

@@ -27,6 +27,8 @@
 		29F7DAAE1E66C06B00A9AF96 /* DQPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F7DAAD1E66C06B00A9AF96 /* DQPlayerControlView.m */; };
 		29F7DAB11E66C08E00A9AF96 /* DQPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F7DAB01E66C08E00A9AF96 /* DQPlayerView.m */; };
 		29F7DAB81E66C60700A9AF96 /* DQPlayerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 29F7DAB71E66C60700A9AF96 /* DQPlayerModel.m */; };
+		29F7DABA1E67B64400A9AF96 /* top_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 29F7DAB91E67B64400A9AF96 /* top_shadow.png */; };
+		29F7DABC1E6821DC00A9AF96 /* bottom_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 29F7DABB1E6821DC00A9AF96 /* bottom_shadow.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +69,8 @@
 		29F7DAB51E66C25A00A9AF96 /* DQPlayerControlViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DQPlayerControlViewDelegate.h; sourceTree = "<group>"; };
 		29F7DAB61E66C60700A9AF96 /* DQPlayerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DQPlayerModel.h; sourceTree = "<group>"; };
 		29F7DAB71E66C60700A9AF96 /* DQPlayerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DQPlayerModel.m; sourceTree = "<group>"; };
+		29F7DAB91E67B64400A9AF96 /* top_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_shadow.png; sourceTree = "<group>"; };
+		29F7DABB1E6821DC00A9AF96 /* bottom_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom_shadow.png; sourceTree = "<group>"; };
 		8611810649205B2580D8C87A /* Pods-DQPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DQPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DQPlayer/Pods-DQPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		C986E3B7BC9EF22E5D3B02B4 /* libPods-DQPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DQPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -132,6 +136,8 @@
 				29F7DAB61E66C60700A9AF96 /* DQPlayerModel.h */,
 				29F7DAB71E66C60700A9AF96 /* DQPlayerModel.m */,
 				29F7DAB51E66C25A00A9AF96 /* DQPlayerControlViewDelegate.h */,
+				29F7DAB91E67B64400A9AF96 /* top_shadow.png */,
+				29F7DABB1E6821DC00A9AF96 /* bottom_shadow.png */,
 				295FCBC01E55A220008DBEE7 /* Main.storyboard */,
 				295FCBC61E55A220008DBEE7 /* Assets.xcassets */,
 				295FCBC81E55A220008DBEE7 /* LaunchScreen.storyboard */,
@@ -230,6 +236,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29F7DABC1E6821DC00A9AF96 /* bottom_shadow.png in Resources */,
+				29F7DABA1E67B64400A9AF96 /* top_shadow.png in Resources */,
 				295FCBDB1E56FB78008DBEE7 /* QQ20170217-165908.mp4 in Resources */,
 				295FCBCA1E55A220008DBEE7 /* LaunchScreen.storyboard in Resources */,
 				295FCBC71E55A220008DBEE7 /* Assets.xcassets in Resources */,

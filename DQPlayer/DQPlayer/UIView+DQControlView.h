@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DQPlayerControlViewDelegate.h"
+#import "DQPlayerModel.h"
 
 @interface UIView (DQControlView)
 @property (nonatomic, weak) id<DQPlayerControlViewDelegate> delegate;
@@ -24,7 +25,7 @@
 
 - (void)playerItemPlaying;
 
-
+- (void)playerModel:(DQPlayerModel *)playerModel;
 
 
 

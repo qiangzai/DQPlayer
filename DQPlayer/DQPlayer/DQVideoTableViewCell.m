@@ -48,9 +48,14 @@
 
 #pragma mark - event response
 - (void)showCellWithModel:(DQVideoModel *)model {
-    self.nameLabel.text = model.name;
-    self.fileSizeLabel.text = model.size;
-    self.imgView.image = [self videoPreViewImageWithUrl:model.path];
+//    self.nameLabel.text = model.name;
+//    self.fileSizeLabel.text = model.size;
+//    self.imgView.image = [self videoPreViewImageWithUrl:model.path];
+    
+    self.nameLabel.text = @"标题名字";
+    self.fileSizeLabel.text = @"1.5M";
+//    self.imgView.image = [self videoPreViewImageWithUrl:model.path];
+    
 }
 
 #pragma mark - CustomDelegate
