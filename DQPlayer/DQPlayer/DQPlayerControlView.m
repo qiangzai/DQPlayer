@@ -15,7 +15,9 @@
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIButton *closeBtn;
 @property (nonatomic, strong) UIButton *fullBtn;
+
 @property (nonatomic, strong) UIImageView *bottomImageView;
+@property (nonatomic, strong) UIButton *play;
 
 @property (nonatomic, strong) DQPlayerModel *playerModel;
 
