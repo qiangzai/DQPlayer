@@ -4,7 +4,8 @@
 //
 //  Created by  lizhongqiang on 2017/3/1.
 //  Copyright © 2017年  lizhongqiang. All rights reserved.
-//
+//  有播放能力的view层
+
 
 #import "DQPlayerView.h"
 #import <AVFoundation/AVFoundation.h>
@@ -121,6 +122,11 @@
 - (void)play {
 //    [self configPlayer];
     [_player play];
+//    [_player playImmediatelyAtRate:2.0];
+}
+
+- (void)playWithRate:(float)rate {
+    [_player playImmediatelyAtRate:rate];
 }
 
 - (void)pause {

@@ -5,20 +5,22 @@
 //  Created by  lizhongqiang on 2017/3/1.
 //  Copyright © 2017年  lizhongqiang. All rights reserved.
 //  http://github.com/renzifeng
+//  播放器的控制层
 
 #import "DQPlayerControlView.h"
 #import <Masonry.h>
 #import "UIView+DQControlView.h"
 
 @interface DQPlayerControlView ()
-@property (nonatomic, strong) UILabel *titleLabel;
+
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIButton *backBtn;
-//@property (nonatomic, strong) UIButton *fullBtn;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @property (nonatomic, strong) UIImageView *bottomImageView;
 @property (nonatomic, strong) UIButton *playBtn;
 @property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, strong) UIButton *rateBtn;
 @property (nonatomic, strong) DQPlayerModel *playerModel;
 
 @end
@@ -33,7 +35,7 @@
         
         [self.topImageView addSubview:self.titleLabel];
         [self.topImageView addSubview:self.backBtn];
-//        [self.topImageView addSubview:self.fullBtn];
+
         
         [self.bottomImageView addSubview:self.playBtn];
         [self.bottomImageView addSubview:self.timeLabel];
@@ -61,12 +63,7 @@
         make.left.equalTo(self.backBtn.mas_right).with.offset(10);
         make.centerY.equalTo(self.topImageView.mas_centerY);
     }];
-    
-//    [self.fullBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(80, 40));
-//        make.centerY.equalTo(self.topImageView.mas_centerY);
-//        make.left.equalTo(self.closeBtn.mas_right).with.offset(10);
-//    }];
+
     
     [self.bottomImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.bottom.mas_equalTo(0);
@@ -90,11 +87,15 @@
     }
 }
 
-//- (void)fullBtnClick:(UIButton *)sender {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:fullScreenAction:)]) {
-//        [self.delegate controlView:self fullScreenAction:sender];
-//    }
-//}
+- (void)rateBtnClick:(UIButton *)sender {
+    //1.0 1.5 2.0
+    
+    
+    
+    
+    
+    
+}
 
 - (void)playBtnClick:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:playAction:)]) {
@@ -113,7 +114,13 @@
 #pragma mark -
 - (void)playerCurrentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime sliderValue:(CGFloat)value {
     NSLog(@"currentTime = %ld\ntotalTime = %ld\nvalue = %f",(long)currentTime,(long)totalTime,value);
-    self.timeLabel.text = [NSString stringWithFormat:@"%ld / %ld",currentTime,totalTime];
+    self.timeLabel.text = [NSString stringWithFormat:@"%@ / %@",[self durationStringWithTime:currentTime],[self durationStringWithTime:totalTime]];
+}
+
+- (NSString *)durationStringWithTime:(int)time {
+    NSString *min = [NSString stringWithFormat:@"%02d",time / 60];
+    NSString *sec = [NSString stringWithFormat:@"%02d",time % 60];
+    return [NSString stringWithFormat:@"%@:%@",min,sec];
 }
 
 #pragma mark - Getter
@@ -148,23 +155,11 @@
 - (UIButton *)backBtn {
     if (_backBtn == nil) {
         _backBtn = [[UIButton alloc] init];
-        
-//        [_backBtn setTitle:@"关闭" forState:UIControlStateNormal];
         [_backBtn setImage:[UIImage imageNamed:@"player_back"] forState:UIControlStateNormal];
         [_backBtn addTarget:self action:@selector(backBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backBtn;
 }
-
-//- (UIButton *)fullBtn {
-//    if (_fullBtn == nil) {
-//        _fullBtn = [[UIButton alloc] init];
-//        _fullBtn.backgroundColor = [UIColor redColor];
-//        [_fullBtn setTitle:@"全屏" forState:UIControlStateNormal];
-//        [_fullBtn addTarget:self action:@selector(fullBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    }
-//    return _fullBtn;
-//}
 
 - (UIButton *)playBtn {
     if (_playBtn == nil) {
@@ -183,6 +178,17 @@
         _timeLabel.textColor = [UIColor whiteColor];
     }
     return _timeLabel;
+}
+
+- (UIButton *)rateBtn {
+    if (_rateBtn == nil) {
+        _rateBtn = [[UIButton alloc] init];
+        [_rateBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [_rateBtn setTitle:@"X 1.0" forState:UIControlStateNormal];
+        [_rateBtn setTintColor:[UIColor whiteColor]];
+        [_rateBtn addTarget:self action:@selector(rateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _rateBtn;
 }
 
 @end
