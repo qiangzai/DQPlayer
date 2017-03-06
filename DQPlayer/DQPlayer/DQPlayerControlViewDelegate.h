@@ -16,13 +16,14 @@
 @protocol DQPlayerControlViewDelegate <NSObject>
 
 @optional
-
+//返回
 - (void)controlView:(UIView *)controlView backAction:(UIButton *)sender;
-
+//播放 暂停
 - (void)controlView:(UIView *)controlView playAction:(UIButton *)sender;
-
+//全屏
 - (void)controlView:(UIView *)controlView fullScreenAction:(UIButton *)sender;
-
+//关闭
+- (void)controlView:(UIView *)controlView closeScreenAction:(UIButton *)sender;
 
 
 @end

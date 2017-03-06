@@ -13,12 +13,12 @@
 @interface DQPlayerControlView ()
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIImageView *topImageView;
-@property (nonatomic, strong) UIButton *closeBtn;
-@property (nonatomic, strong) UIButton *fullBtn;
+@property (nonatomic, strong) UIButton *backBtn;
+//@property (nonatomic, strong) UIButton *fullBtn;
 
 @property (nonatomic, strong) UIImageView *bottomImageView;
-@property (nonatomic, strong) UIButton *play;
-
+@property (nonatomic, strong) UIButton *playBtn;
+@property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) DQPlayerModel *playerModel;
 
 @end
@@ -32,9 +32,11 @@
         [self addSubview:self.bottomImageView];
         
         [self.topImageView addSubview:self.titleLabel];
-        [self.topImageView addSubview:self.closeBtn];
-        [self.topImageView addSubview:self.fullBtn];
+        [self.topImageView addSubview:self.backBtn];
+//        [self.topImageView addSubview:self.fullBtn];
         
+        [self.bottomImageView addSubview:self.playBtn];
+        [self.bottomImageView addSubview:self.timeLabel];
         
         [self makeSubViewsConstraints];
     }
@@ -50,39 +52,55 @@
         make.top.equalTo(self.mas_top).offset(0);
         make.height.mas_equalTo(50);
     }];
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(30, 30));
+        make.centerY.equalTo(self.topImageView.mas_centerY);
         make.left.equalTo(self.topImageView.mas_left).with.offset(10);
+    }];
+    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.backBtn.mas_right).with.offset(10);
         make.centerY.equalTo(self.topImageView.mas_centerY);
     }];
-    [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(80, 40));
-        make.centerY.equalTo(self.topImageView.mas_centerY);
-        make.left.equalTo(self.titleLabel.mas_right).with.offset(10);
-    }];
-    [self.fullBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(80, 40));
-        make.centerY.equalTo(self.topImageView.mas_centerY);
-        make.left.equalTo(self.closeBtn.mas_right).with.offset(10);
-    }];
+    
+//    [self.fullBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(80, 40));
+//        make.centerY.equalTo(self.topImageView.mas_centerY);
+//        make.left.equalTo(self.closeBtn.mas_right).with.offset(10);
+//    }];
     
     [self.bottomImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.bottom.mas_equalTo(0);
         make.height.mas_equalTo(50);
     }];
+    [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(20, 20));
+        make.centerY.equalTo(self.bottomImageView.mas_centerY);
+        make.left.equalTo(self.bottomImageView.mas_left).with.offset(5);
+    }];
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.playBtn.mas_right).with.offset(5);
+        make.bottom.equalTo(self.bottomImageView.mas_bottom).with.offset(-5);
+    }];
 }
 
-- (void)closeBtnClick:(UIButton *)sender {
+#pragma mark - event
+- (void)backBtnClick:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:backAction:)]) {
         [self.delegate controlView:self backAction:sender];
     }
 }
 
-- (void)fullBtnClick:(UIButton *)sender {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:fullScreenAction:)]) {
-        [self.delegate controlView:self fullScreenAction:sender];
+//- (void)fullBtnClick:(UIButton *)sender {
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:fullScreenAction:)]) {
+//        [self.delegate controlView:self fullScreenAction:sender];
+//    }
+//}
+
+- (void)playBtnClick:(UIButton *)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:playAction:)]) {
+        [self.delegate controlView:self playAction:sender];
     }
 }
-
 #pragma mark -
 - (void)playerModel:(DQPlayerModel *)playerModel {
     _playerModel = playerModel;
@@ -91,9 +109,11 @@
     }
 }
 
+
 #pragma mark -
 - (void)playerCurrentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime sliderValue:(CGFloat)value {
     NSLog(@"currentTime = %ld\ntotalTime = %ld\nvalue = %f",(long)currentTime,(long)totalTime,value);
+    self.timeLabel.text = [NSString stringWithFormat:@"%ld / %ld",currentTime,totalTime];
 }
 
 #pragma mark - Getter
@@ -125,22 +145,44 @@
     return _titleLabel;
 }
 
-- (UIButton *)closeBtn {
-    if (_closeBtn == nil) {
-        _closeBtn = [[UIButton alloc] init];
-        _closeBtn.backgroundColor = [UIColor redColor];
-        [_closeBtn addTarget:self action:@selector(closeBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+- (UIButton *)backBtn {
+    if (_backBtn == nil) {
+        _backBtn = [[UIButton alloc] init];
+        
+//        [_backBtn setTitle:@"关闭" forState:UIControlStateNormal];
+        [_backBtn setImage:[UIImage imageNamed:@"player_back"] forState:UIControlStateNormal];
+        [_backBtn addTarget:self action:@selector(backBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _closeBtn;
+    return _backBtn;
 }
 
-- (UIButton *)fullBtn {
-    if (_fullBtn == nil) {
-        _fullBtn = [[UIButton alloc] init];
-        _fullBtn.backgroundColor = [UIColor redColor];
-        [_fullBtn addTarget:self action:@selector(fullBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//- (UIButton *)fullBtn {
+//    if (_fullBtn == nil) {
+//        _fullBtn = [[UIButton alloc] init];
+//        _fullBtn.backgroundColor = [UIColor redColor];
+//        [_fullBtn setTitle:@"全屏" forState:UIControlStateNormal];
+//        [_fullBtn addTarget:self action:@selector(fullBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _fullBtn;
+//}
+
+- (UIButton *)playBtn {
+    if (_playBtn == nil) {
+        _playBtn = [[UIButton alloc] init];
+        [_playBtn setImage:[UIImage imageNamed:@"player_play"] forState:UIControlStateNormal];
+        [_playBtn setImage:[UIImage imageNamed:@"player_pause"] forState:UIControlStateSelected];
+        [_playBtn addTarget:self action:@selector(playBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _fullBtn;
+    return _playBtn;
+}
+
+- (UILabel *)timeLabel {
+    if (_timeLabel == nil) {
+        _timeLabel = [[UILabel alloc] init];
+        _timeLabel.font = [UIFont systemFontOfSize:15];
+        _timeLabel.textColor = [UIColor whiteColor];
+    }
+    return _timeLabel;
 }
 
 @end

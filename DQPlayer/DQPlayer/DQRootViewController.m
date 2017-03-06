@@ -64,16 +64,16 @@
         make.edges.mas_equalTo(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
     
-    self.playerFatherView = [[UIView alloc] init];
-//    self.playerFatherView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:self.playerFatherView];
-    [self.playerFatherView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(64);
-//        make.leading.trailing.mas_equalTo(0);
-//        make.height.mas_equalTo(self.playerFatherView.mas_width).multipliedBy(9.0f/16.0f);
-        make.size.mas_equalTo(CGSizeMake(kDQWidth, 300));
-        make.left.equalTo(self.view.mas_left);
-    }];
+//    self.playerFatherView = [[UIView alloc] init];
+////    self.playerFatherView.backgroundColor = [UIColor redColor];
+//    [self.view addSubview:self.playerFatherView];
+//    [self.playerFatherView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(64);
+////        make.leading.trailing.mas_equalTo(0);
+////        make.height.mas_equalTo(self.playerFatherView.mas_width).multipliedBy(9.0f/16.0f);
+//        make.size.mas_equalTo(CGSizeMake(kDQWidth, 300));
+//        make.left.equalTo(self.view.mas_left);
+//    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,7 +122,7 @@
     
     [self.playerView resetToPlayNewVideo:self.playerModel];
     [self.playerView play];
-//    [self.playerView fullScreenAction];
+    [self.playerView fullScreenAction];
 }
 
 //- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -232,7 +232,9 @@
         _playerModel.title = @"视频标题";
         NSString *path = [[NSBundle mainBundle] pathForResource:@"QQ20170217-165908.mp4" ofType:nil];
         _playerModel.videoURL = [NSURL fileURLWithPath:path];
-        _playerModel.fatherView = self.playerFatherView;
+//        _playerModel.fatherView = self.playerFatherView;
+//        _playerModel.fatherView = self.view;
+        _playerModel.fatherView = self.listTableView;
     }
     return _playerModel;
 }

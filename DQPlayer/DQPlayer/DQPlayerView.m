@@ -162,12 +162,20 @@
 
 - (void)fullScreenAction {
     //先从小屏到大屏
-    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-    if (orientation == UIDeviceOrientationLandscapeRight) {
-        [self interfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+    if (self.isFullScreen) {
+        [self interfaceOrientation:UIInterfaceOrientationPortrait];
+        self.isFullScreen = NO;
+        return;
     } else {
-        [self interfaceOrientation:UIInterfaceOrientationLandscapeRight];
+        UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+        if (orientation == UIDeviceOrientationLandscapeRight) {
+            [self interfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+        } else {
+            [self interfaceOrientation:UIInterfaceOrientationLandscapeRight];
+        }
+        self.isFullScreen = YES;
     }
+    
 }
 
 - (void)interfaceOrientation:(UIInterfaceOrientation)orientation {
@@ -176,13 +184,19 @@
         [self setOrientationLandscapeConstraint:orientation];
     } else if (orientation == UIInterfaceOrientationPortrait) {
         // 设置竖屏
-//        [self setOrientationPortraitConstraint];
+        [self setOrientationPortraitConstraint];
     }
+}
+
+- (void)setOrientationPortraitConstraint {
+//    [self addPlayerToFatherView:self.playerModel.fatherView];
+    [self toOrientation:UIInterfaceOrientationPortrait];
+    self.isFullScreen = NO;
 }
 
 - (void)setOrientationLandscapeConstraint:(UIInterfaceOrientation)orientation {
     [self toOrientation:orientation];
-//    self.isFullScreen = YES;
+    self.isFullScreen = YES;
 }
 
 - (void)toOrientation:(UIInterfaceOrientation)orientation {
@@ -197,12 +211,14 @@
         if (currentOrientation == UIInterfaceOrientationPortrait) {
             [self removeFromSuperview];
 //            ZFBrightnessView *brightnessView = [ZFBrightnessView sharedBrightnessView];
+            
             [[UIApplication sharedApplication].keyWindow addSubview:self];
             [self mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.width.equalTo(@(kDQHeight));
                 make.height.equalTo(@(kDQWidth));
                 make.center.equalTo([UIApplication sharedApplication].keyWindow);
             }];
+            
         }
     }
     // iOS6.0之后,设置状态条的方法能使用的前提是shouldAutorotate为NO,也就是说这个视图控制器内,旋转要关掉;
@@ -265,16 +281,36 @@
 #pragma mark - DQPlayerControlViewDelegate
 - (void)controlView:(UIView *)controlView playAction:(UIButton *)sender {
     
+    if (sender.selected) {
+        [self play];
+    } else {
+        [self pause];
+    }
+    sender.selected = !sender.selected;
+    
 }
 
 - (void)controlView:(UIView *)controlView backAction:(UIButton *)sender {
+    [self fullScreenAction];
     [self resetPlayer];
     [self removeFromSuperview];
+    
+    
+    
+//    [UIView animateWithDuration:2 animations:^{
+//        
+//    } completion:^(BOOL finished) {
+//        
+//    }];
+    
 }
 
 - (void)controlView:(UIView *)controlView fullScreenAction:(UIButton *)sender {
     [self fullScreenAction];
 }
+
+
+
 
 #pragma mark - Setter
 - (void)setVideoURL:(NSURL *)videoURL {
