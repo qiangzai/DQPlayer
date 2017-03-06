@@ -12,7 +12,6 @@
 
 #import "DQRootViewController.h"
 #import <Masonry.h>
-#import "DQVideoPlayerView.h"
 #import "DQVideoTableViewCell.h"
 
 #import "DQPlayerView.h"
@@ -21,10 +20,8 @@
 
 
 
-@interface DQRootViewController ()<DQVideoPlayerViewDelegate, UITableViewDelegate, UITableViewDataSource>
-{
-    
-}
+@interface DQRootViewController ()<UITableViewDelegate, UITableViewDataSource>
+
 @property (nonatomic, strong) UITableView *listTableView;
 @property (nonatomic, strong) NSArray *listArray;
 @property (nonatomic, strong) DQPlayerView *playerView;
