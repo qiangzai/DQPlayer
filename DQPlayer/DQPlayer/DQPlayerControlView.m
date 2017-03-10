@@ -39,6 +39,7 @@
         
         [self.bottomImageView addSubview:self.playBtn];
         [self.bottomImageView addSubview:self.timeLabel];
+        [self.bottomImageView addSubview:self.rateBtn];
         
         [self makeSubViewsConstraints];
     }
@@ -77,6 +78,11 @@
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.playBtn.mas_right).with.offset(5);
         make.bottom.equalTo(self.bottomImageView.mas_bottom).with.offset(-5);
+    }];
+    [self.rateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.right.equalTo(self.bottomImageView.mas_right).with.offset(-10);
+        make.centerY.equalTo(self.bottomImageView.mas_centerY);
     }];
 }
 
