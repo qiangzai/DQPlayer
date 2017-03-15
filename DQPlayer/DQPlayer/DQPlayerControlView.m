@@ -13,15 +13,18 @@
 
 @interface DQPlayerControlView ()
 
-@property (nonatomic, strong) UIImageView *topImageView;
-@property (nonatomic, strong) UIButton *backBtn;
-@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIImageView *topImageView;        //顶部view
+@property (nonatomic, strong) UIButton *backBtn;                //返回
+@property (nonatomic, strong) UILabel *titleLabel;              //标题
 
-@property (nonatomic, strong) UIImageView *bottomImageView;
-@property (nonatomic, strong) UIButton *playBtn;
-@property (nonatomic, strong) UILabel *timeLabel;
-@property (nonatomic, strong) UIButton *rateBtn;
-@property (nonatomic, strong) DQPlayerModel *playerModel;
+@property (nonatomic, strong) UIImageView *bottomImageView;     //底部view
+@property (nonatomic, strong) UIButton *playBtn;                //播放
+@property (nonatomic, strong) UILabel *timeLabel;               //进度时间
+//@property (nonatomic, strong) UIProgressView *progressView;     //
+@property (nonatomic, strong) UISlider *progressSlider;         //进度条
+@property (nonatomic, strong) UIButton *rateBtn;                //播放速度
+@property (nonatomic, strong) DQPlayerModel *playerModel;       //
+
 
 @end
 
@@ -35,12 +38,13 @@
         
         [self.topImageView addSubview:self.titleLabel];
         [self.topImageView addSubview:self.backBtn];
-
+        
         
         [self.bottomImageView addSubview:self.playBtn];
         [self.bottomImageView addSubview:self.timeLabel];
         [self.bottomImageView addSubview:self.rateBtn];
-        
+//        [self.bottomImageView addSubview:self.progressView];
+        [self.bottomImageView addSubview:self.progressSlider];
         [self makeSubViewsConstraints];
     }
     return self;
@@ -84,6 +88,19 @@
         make.right.equalTo(self.bottomImageView.mas_right).with.offset(-10);
         make.centerY.equalTo(self.bottomImageView.mas_centerY);
     }];
+//    [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.playBtn.mas_right).with.offset(2);
+//        make.top.equalTo(self.playBtn.mas_top);
+//        make.height.mas_equalTo(2);
+//        make.right.equalTo(self.bottomImageView.mas_right).with.offset(-5);
+//    }];
+    [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.playBtn.mas_right).with.offset(2);
+        make.top.equalTo(self.bottomImageView.mas_top);
+        make.height.mas_equalTo(2);
+        make.right.equalTo(self.bottomImageView.mas_right).with.offset(-5);
+    }];
+    
 }
 
 #pragma mark - event
@@ -108,12 +125,18 @@
         [self.delegate controlView:self playAction:sender];
     }
 }
+
+- (void)sliderValueChanged:(UISlider *)sender {
+    NSLog(@"AAAAAAAAAAAAA  %f",sender.value);
+}
+
 #pragma mark -
 - (void)playerModel:(DQPlayerModel *)playerModel {
     _playerModel = playerModel;
     if (playerModel.title) {
         self.titleLabel.text = playerModel.title;
     }
+    
 }
 
 
@@ -121,6 +144,8 @@
 - (void)playerCurrentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime sliderValue:(CGFloat)value {
     NSLog(@"currentTime = %ld\ntotalTime = %ld\nvalue = %f",(long)currentTime,(long)totalTime,value);
     self.timeLabel.text = [NSString stringWithFormat:@"%@ / %@",[self durationStringWithTime:currentTime],[self durationStringWithTime:totalTime]];
+//    [self.progressSlider setProgress:value animated:YES];
+    [self.progressSlider setValue:value animated:YES];
 }
 
 - (NSString *)durationStringWithTime:(int)time {
@@ -145,6 +170,7 @@
         _bottomImageView = [[UIImageView alloc] init];
         _bottomImageView.userInteractionEnabled = YES;
         _bottomImageView.image = [UIImage imageNamed:@"bottom_shadow"];
+        [_bottomImageView setBackgroundColor:[UIColor redColor]];
     }
     return _bottomImageView;
 }
@@ -193,8 +219,29 @@
         [_rateBtn setTitle:@"X 1.0" forState:UIControlStateNormal];
         [_rateBtn setTintColor:[UIColor whiteColor]];
         [_rateBtn addTarget:self action:@selector(rateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_rateBtn setBackgroundColor:[UIColor blackColor]];
     }
     return _rateBtn;
+}
+
+//- (UIProgressView *)progressView {
+//    if (_progressView == nil) {
+//        _progressView = [[UIProgressView alloc] init];
+//        _progressView.progressViewStyle = UIProgressViewStyleDefault;
+//        _progressView.progressTintColor = [UIColor redColor];
+//    }
+//    return _progressView;
+//}
+
+- (UISlider *)progressSlider {
+    if (_progressSlider == nil) {
+        _progressSlider = [[UISlider alloc] init];
+        [_progressSlider setThumbImage:[UIImage imageNamed:@"player_slider"] forState:UIControlStateNormal];
+        [_progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+        _progressSlider.continuous = YES;
+        _progressSlider.userInteractionEnabled = YES;
+    }
+    return _progressSlider;
 }
 
 @end
