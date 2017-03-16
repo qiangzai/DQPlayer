@@ -315,7 +315,11 @@
     [self fullScreenAction];
 }
 
-
+- (void)controlView:(UIView *)controlView rateAction:(UIButton *)sender {
+    NSLog(@"text = %@",sender.titleLabel.text);
+    [self playWithRate:1.0];
+    
+}
 
 
 #pragma mark - Setter

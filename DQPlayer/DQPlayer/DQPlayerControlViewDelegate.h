@@ -25,6 +25,9 @@
 //关闭
 - (void)controlView:(UIView *)controlView closeScreenAction:(UIButton *)sender;
 
+//
+- (void)controlView:(UIView *)controlView rateAction:(UIButton *)sender;
+
 
 @end
 

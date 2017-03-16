@@ -23,6 +23,7 @@
 //@property (nonatomic, strong) UIProgressView *progressView;     //
 @property (nonatomic, strong) UISlider *progressSlider;         //进度条
 @property (nonatomic, strong) UIButton *rateBtn;                //播放速度
+@property (nonatomic, assign) float playerRate;
 @property (nonatomic, strong) DQPlayerModel *playerModel;       //
 
 
@@ -112,8 +113,11 @@
 
 - (void)rateBtnClick:(UIButton *)sender {
     //1.0 1.5 2.0
+    float rate = 1.0;
     
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(controlView:rateAction:)]) {
+        [self.delegate controlView:self rateAction:sender];
+    }
     
     
     

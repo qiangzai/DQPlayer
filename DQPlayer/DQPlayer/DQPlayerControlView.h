@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface DQPlayerControlView : UIView
-
+@property (nonatomic, assign) BOOL test;
 @end
